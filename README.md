@@ -1,6 +1,6 @@
 # Letterboxd API - Web Back-End
 Projeto 1 da disciplina de **Programação Web Back-End**  
-**Universidade Tecnológica Federal do Paraná (UTFPR) - Campus Cornélio Procópio**  
+**Universidade Tecnológica Federal do Paraná (UTFPR) - Campus Londrina**  
 **Professor:** Willian Massami Watanabe  
 **Aluno:** Gustavo Ribeiro de Melo e Costa
 
