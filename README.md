@@ -2,7 +2,7 @@
 Projeto 1 da disciplina de **Programação Web Back-End**  
 **Universidade Tecnológica Federal do Paraná (UTFPR) - Campus Londrina**  
 **Professor:** Willian Massami Watanabe  
-**Aluno:** Gustavo Ribeiro de Melo e Costa
+**Aluno:** Gustavo Ribeiro de Melo e Costa & Verônica Soreano
 
 ## 📌 Sobre o Projeto
 Uma Web API JSON desenvolvida em duas camadas (Python com Flask e MySQL) simulando um serviço de micro-blogging de avaliações de filmes (estilo Letterboxd).
