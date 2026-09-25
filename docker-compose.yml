@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  database:
+    image: postgres:16
+    container_name: postgres-letterboxd
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: letterboxd_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
+
+# esse arquivo descreve tudo, qual imagem baixar, usuario, senha, banco de dados, porta, volume, etc.
+# volumes: pgdata; garante q mesmo que o container seja desligado os dados nao vão ser perdidos
+
+# usar 'docker-compose up -d' no terminal da pasta do projeto para subir o container do banco de dados
+# esse comando le o .yml e sobe o banco identico ao meu
+

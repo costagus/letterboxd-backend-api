@@ -1,0 +1,51 @@
+micro-blogging (inspirado no letterboxd)
+
+padrao mvc
+
+o script sql nao deve ser solto, deve estar em um arquivo chamado bootstrap.py
+com uma function de criar a tabela e popular, que vai criar a tabela e inserir os dados automaticamente
+
+estrutura das classes models
+-> cada model eh uma classe python com construtor q recebe o cursor
+exemplo: class Users()
+            def __init__(self, cursor=None):
+                self._cursor = cursor
+
+quando se abre uma conexao global, trava os processos wsgi, a solução eh criar uma funcao get_connection() usando o g do flask
+e fechar automaticamente no final da requisicao c @app.teardown_appcontext
+
+tem a questao do SQL Injection p toamr cuidado, que tem q usar parametros seguros com tuplas (valor,) na query do bd
+
+rotas organizadas e parametrizadas -> <int:id>, <string:termo>
+
+retornar listas de dicionarios return [ {'id': ..., 'titulo': ... } ] q o flask vai serializar automaticamente em application/json
+
+front-end simples na pasta static/ ; vms usar static/index.html p consumir a API com fetch() e async/await direto em js puro
+servidor rodando na porta 3000 e host 0.0.0.0
+
+estrutura? :
+
+letterboxd-api/
+│
+├── app.py                  # servidor flask e rotas
+├── bootstrap.py            # criação das tabelas e população inicial dos dados
+│
+├── models/
+│   ├── __init__.py         # vazio
+│   ├── users.py            # classe Users (busca de perfil e usuário) ?
+│   └── reviews.py          # classe Reviews (busca com paginação e comentários) ?
+│
+├── static/                 # front
+│   ├── index.html          
+│   ├── main.css            
+│   └── main.js             # js com fetch() e async/await
+│
+├── .gitignore              # já configurado
+├── README.md               # já configurado
+└── requirements.txt        # dependências
+
+
+
+>> usar postgresql // (pipeline psycopg2-binary?) // docker 
+
+criar pastas do projeto, classes e tals
