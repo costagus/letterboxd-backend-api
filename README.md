@@ -16,4 +16,4 @@ O projeto segue o padrão arquitetural **MVC (Model-View-Controller)**:
 ## 🛠️ Tecnologias
 - Python 3
 - Flask
-- MySQL
+- PostgreSQL
