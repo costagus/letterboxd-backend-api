@@ -1,3 +1,23 @@
+1. abra o terminal em uma pasta de sua preferência e faça o clone:
+
+```bash
+git clone https://github.com/costagus/letterboxd-backend-api.git
+cd letterboxd-backend-api
+
+2. abrir o docker desktop
+no terminal executar:
+docker compose up -d
+
+3. cria o ambiente virtual isolado (terminal na pasta / ctrl + '):
+
+python -m venv venv
+ativa o ambiente no Windows
+.\venv\Scripts\Activate.ps1
+instala o Flask e o driver do PostgreSQL
+pip install -r requirements.txt
+
+=
+
 micro-blogging (inspirado no letterboxd)
 
 padrao mvc
