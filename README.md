@@ -5,7 +5,7 @@ Projeto 1 da disciplina de **Programação Web Back-End**
 **Aluno:** Gustavo Ribeiro de Melo e Costa & Verônica Soreano
 
 ## 📌 Sobre o Projeto
-Uma Web API JSON desenvolvida em duas camadas (Python com Flask e MySQL) simulando um serviço de micro-blogging de avaliações de filmes (estilo Letterboxd).
+Uma Web API JSON desenvolvida em duas camadas simulando um serviço de micro-blogging de avaliações de filmes (estilo Letterboxd).
 
 ## 🏛️ Arquitetura
 O projeto segue o padrão arquitetural **MVC (Model-View-Controller)**:
