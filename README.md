@@ -9,7 +9,7 @@ Uma Web API JSON desenvolvida em duas camadas simulando um serviço de micro-blo
 
 ## 🏛️ Arquitetura
 O projeto segue o padrão arquitetural **MVC (Model-View-Controller)**:
-- **Models:** Camada de dados responsável pela comunicação direta com o MySQL.
+- **Models:** Camada de dados responsável pela comunicação direta com o PostgreSQL.
 - **Controllers:** Camada intermediária que gerencia requisições HTTP, validações e respostas JSON.
 - **Views:** Front-end simples construído com HTML, CSS e JavaScript ('fetch').
 
