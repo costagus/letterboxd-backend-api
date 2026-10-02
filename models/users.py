@@ -18,7 +18,7 @@ class Users:
             return None
 
         self._cursor.execute('''
-            SELECT id, movie_title, rating, content, poster_url, posted_at 
+            SELECT id, movie_title, rating, content, poster_url
             FROM reviews 
             WHERE user_id = %s
             ''', (user_id,))
@@ -32,8 +32,7 @@ class Users:
                 "movie_title": review[1],
                 "rating": review[2],
                 "content": review[3],
-                "poster_url": review[4],
-                "posted_at": review[5]
+                "poster_url": review[4]
             }
             for review in reviews_rows
         ]
