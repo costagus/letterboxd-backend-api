@@ -17,9 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch(`/reviews?q=${encodeURIComponent(query)}&page=1&limit=10`);
             const data = await response.json();
 
-            // limpa os cards que ja estavam na tela
-            // assim os novos resultados podem ser mostrados
-
             reviewsGrid.innerHTML = '';
 
             // verifica se a pesquisa nao encontrou nenhum filme
@@ -68,7 +65,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // permite fazer a pesquisa apertando enter
-    // funciona da mesma forma que clicar no botao pesquisar
     searchInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
             fetchReviews(searchInput.value.trim());
@@ -77,6 +73,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // faz uma busca assim que a pagina abre
-    // por isso os filmes ja aparecem sem precisar pesquisar primeiro
     fetchReviews();
 });
