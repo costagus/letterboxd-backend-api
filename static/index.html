@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GV REVIEWS - Letterboxd</title>
+    <link rel="stylesheet" href="/static/main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div style="background: rgba(11, 12, 16, 0.9); border-bottom: 1px solid #1f242d;">
+        <header class="navbar">
+            <div class="logo">
+                <span class="logo-dot"></span> GV REVIEWS
+            </div>
+            <button class="btn-pink">+ Registrar</button>
+        </header>
+    </div>
+
+    <main class="container">
+        <section class="welcome-banner">
+            <span class="badge">GV REVIEWS DIÁRIO</span>
+            <h1>Boa noite, Verô.</h1>
+            <p>O que você assistiu recentemente? Adicione impressões, estrelas ou registre um novo favorito para a sua coleção.</p>
+
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Digite o título do filme..." />
+                <button id="searchBtn" class="btn-cyan">+ Pesquisar</button>
+            </div>
+        </section>
+
+        <section class="recent-section">
+            <div class="section-header">
+                <h2>Assistindo & Recentes</h2>
+            </div>
+            <div id="reviewsGrid" class="grid"></div>
+        </section>
+    </main>
+
+    <script src="/static/main.js"></script>
+</body>
+</html>
