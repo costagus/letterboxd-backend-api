@@ -31,10 +31,10 @@ def close_db(exception):
         db.close()
 
 # agora teremos as rotas da nossa API
-# teste p/ ver se o flask tá rodando, e se a conexão com o banco de dados tá funcionando
 @app.route('/')
-def index():
-    return jsonify({"message": "letterboxd rodando!"})   
+@app.route('/app')
+def serve_frontend():
+    return send_from_directory('static', 'index.html')
 
 # endpoint p/ pegar o perfil de um usuário pelo id, incluindo suas reviews
 @app.route('/users/<int:user_id>')
@@ -51,14 +51,10 @@ def get_user_profile(user_id):
 # explicação do que foi feito: criamosuma rota que recebe o id do usuário como parâmetro, e chamamos o método get_by_id da classe Users, 
 # que retorna um dicionário com os dados do usuário e suas reviews.. se o usuário não for encontrado, retornamos um erro 404!!
 
-# ROTA DE INSERÇÃO DE REVIEWS
-@app.route('/app')
-def serve_frontend():
-    return send_from_directory('static', 'index.html')
 #rota de reviews p buscar avaliações
 @app.route('/reviews', methods=['GET'])
 def get_reviews():
-    termo = request.args.get('q', default='', type=str) #pega o texto digitado, se não tiver nada usa vazio
+    termo = request.args.get('termo') or request.args.get('q') or '' #pega o texto digitado, se não tiver nada usa vazio
     page = request.args.get('page', default=1, type=int) #pega o num de pag q queremos buscar,se ñ informar usa 1
     limit = request.args.get('limit', default=10, type=int) #define resultado por pagina
 
@@ -72,6 +68,21 @@ def get_reviews():
     return jsonify({
         "page": page,
         "limit": limit,
+        "termo_buscado": termo,
+        "total_results": len(results),
+        "results": results
+    })
+
+
+# rota parametrizada de reviews p buscar avaliações por termo na url
+@app.route('/reviews/search/<string:termo>', methods=['GET'])
+def get_reviews_by_term(termo):
+    cursor = get_db().cursor()
+    reviews_model = Reviews(cursor)
+    results = reviews_model.search(query=termo, page=1, limit=10)
+    cursor.close()
+    return jsonify({
+        "termo_buscado": termo,
         "total_results": len(results),
         "results": results
     })

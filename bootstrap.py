@@ -14,6 +14,9 @@ def create_table_and_populate():
     conn = psycopg2.connect(**DB_CONFIG)
     cursor = conn.cursor()
 
+    # comando p limpar a tabela antes de reinserior os dados (limpa e zera ids)
+    cursor.execute("TRUNCATE TABLE reviews, users RESTART IDENTITY CASCADE;")
+
     # criando a tabela users
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS users (
