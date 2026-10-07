@@ -39,6 +39,9 @@ def serve_frontend():
 # endpoint p/ pegar o perfil de um usuário pelo id, incluindo suas reviews
 @app.route('/users/<int:user_id>')
 def get_user_profile(user_id):
+    if 'text/html' in request.headers.get('Accept', ''):
+        return send_from_directory('static', 'index.html')
+
     cursor = get_db().cursor()
     users_model = Users(cursor)
     user_data = users_model.get_by_id(user_id)
@@ -54,16 +57,16 @@ def get_user_profile(user_id):
 #rota de reviews p buscar avaliações
 @app.route('/reviews', methods=['GET'])
 def get_reviews():
+    if 'text/html' in request.headers.get('Accept', ''):
+        return send_from_directory('static', 'index.html')
     termo = request.args.get('termo') or request.args.get('q') or '' #pega o texto digitado, se não tiver nada usa vazio
     page = request.args.get('page', default=1, type=int) #pega o num de pag q queremos buscar,se ñ informar usa 1
     limit = request.args.get('limit', default=10, type=int) #define resultado por pagina
-
 #acesso ao banco
     cursor = get_db().cursor()
     reviews_model = Reviews(cursor)
     results = reviews_model.search(query=termo, page=page, limit=limit)
     cursor.close()
-
 #devolve o banco em jsonify
     return jsonify({
         "page": page,
@@ -72,7 +75,6 @@ def get_reviews():
         "total_results": len(results),
         "results": results
     })
-
 
 # rota parametrizada de reviews p buscar avaliações por termo na url
 @app.route('/reviews/search/<string:termo>', methods=['GET'])
