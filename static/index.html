@@ -11,7 +11,7 @@
 
     <div style="background: rgba(11, 12, 16, 0.9); border-bottom: 1px solid #1f242d;">
         <header class="navbar">
-            <div class="logo">
+            <div class="logo" id="navHome" style="cursor: pointer;">
                 <span class="logo-dot"></span> GV REVIEWS
             </div>
             <button class="btn-pink">+ Registrar</button>
@@ -19,23 +19,39 @@
     </div>
 
     <main class="container">
-        <section class="welcome-banner">
-            <span class="badge">GV REVIEWS DIÁRIO</span>
-            <h1>Boa noite, Verô.</h1>
-            <p>O que você assistiu recentemente? Adicione impressões, estrelas ou registre um novo favorito para a sua coleção.</p>
+        <!-- TELA DE REVIEWS E BUSCA -->
+        <div id="reviewsView">
+            <section class="welcome-banner">
+                <span class="badge">GV REVIEWS DIÁRIO</span>
+                <h1>Boa noite, Verô.</h1>
+                <p>O que você assistiu recentemente? Adicione impressões, estrelas ou registre um novo favorito para a sua coleção.</p>
 
-            <div class="search-box">
-                <input type="text" id="searchInput" placeholder="Digite o título do filme..." />
-                <button id="searchBtn" class="btn-cyan">+ Pesquisar</button>
-            </div>
-        </section>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Digite o título do filme..." />
+                    <button id="searchBtn" class="btn-cyan">+ Pesquisar</button>
+                </div>
+            </section>
 
-        <section class="recent-section">
-            <div class="section-header">
-                <h2>Assistindo & Recentes</h2>
-            </div>
-            <div id="reviewsGrid" class="grid"></div>
-        </section>
+            <section class="recent-section">
+                <div class="section-header">
+                    <h2>Assistindo & Recentes</h2>
+                </div>
+                <div id="reviewsGrid" class="grid"></div>
+
+                <!-- paginação -->
+                <div class="pagination">
+                    <button id="prevBtn" class="btn-secondary">Anterior</button>
+                    <span id="pageInfo">Página 1</span>
+                    <button id="nextBtn" class="btn-secondary">Próxima</button>
+                </div>
+            </section>
+        </div>
+
+        <!-- TELA DE PERFIL DE USUÁRIO -->
+        <div id="userView" style="display: none; width: 100%;">
+            <button id="backBtn" class="btn-secondary" style="margin-bottom: 20px;">← Voltar para Avaliações</button>
+            <div id="userContainer"></div>
+        </div>
     </main>
 
     <script src="/static/main.js"></script>

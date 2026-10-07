@@ -1,77 +1,89 @@
 document.addEventListener('DOMContentLoaded', () => {
+    let page = 1;
 
-    const searchInput = document.getElementById('searchInput');
-    const searchBtn = document.getElementById('searchBtn');
-    const reviewsGrid = document.getElementById('reviewsGrid');
+    // Alterna a tela e carrega os dados conforme a hash (#users/1 ou vazia)
+    async function navegar() {
+        const hash = window.location.hash;
+        const reviewsView = document.getElementById('reviewsView');
+        const userView = document.getElementById('userView');
 
-    // pega os elementos que vamos usar na pagina:
-    // campo de pesquisa, botao de pesquisar e local onde os cards vao aparecer
+        // Se a URL tiver #users/ID, carrega o perfil do utilizador
+        if (hash.startsWith('#users/')) {
+            reviewsView.style.display = 'none';
+            userView.style.display = 'block';
 
-
-    // funcao para buscar as avaliacoes na api
-    // recebe o que foi pesquisado e envia para o backend
-    async function fetchReviews(query = '') {
-        try {
-            // chama a rota do reviews do backend
-            // envia o termo pesquisado, a pagina e a quantidade de resultados
-            const response = await fetch(`/reviews?q=${encodeURIComponent(query)}&page=1&limit=10`);
-            const data = await response.json();
-
-            reviewsGrid.innerHTML = '';
-
-            // verifica se a pesquisa nao encontrou nenhum filme
-            // se nao encontrar, mostra uma mensagem e para a funcao
-            if (data.results.length === 0) {
-                reviewsGrid.innerHTML = '<p style="color: #8a99ad; text-align: center; grid-column: 1/-1;">Nenhum filme encontrado.</p>';
+            const userId = hash.replace('#users/', '');
+            const res = await fetch(`/users/${userId}`);
+            
+            if (!res.ok) {
+                document.getElementById('userContainer').innerHTML = '<p style="color: #e91e63;">Usuário não encontrado.</p>';
                 return;
             }
 
-            // passa por cada review encontrada
-            // para cada uma, cria um card com as informacoes do filme
-            data.results.forEach(review => {
+            const user = await res.json();
+
+            document.getElementById('userContainer').innerHTML = `
+                <div class="profile-card">
+                    <img src="${user.avatar_url || 'https://via.placeholder.com/150'}" class="profile-avatar">
+                    <div>
+                        <h2>${user.name} (@${user.username})</h2>
+                        <p style="color: #8a99ad;">${user.bio || 'Sem biografia.'}</p>
+                    </div>
+                </div>
+                <h3 style="margin: 30px 0 15px 0;">Avaliações de ${user.name} (${user.reviews.length})</h3>
+                <div class="grid">
+                    ${user.reviews.map(r => `
+                        <div class="card">
+                            <img src="${r.poster_url || 'https://via.placeholder.com/220x300'}">
+                            <div class="card-body">
+                                <div class="card-title">${r.movie_title}</div>
+                                <div class="rating">★ ${r.rating}/10</div>
+                                <div class="content">${r.content}</div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        } else {
+            // Se não tiver #users/, exibe a lista de reviews com busca e paginação
+            userView.style.display = 'none';
+            reviewsView.style.display = 'block';
+
+            const busca = document.getElementById('searchInput').value.trim();
+            const res = await fetch(`/reviews?q=${encodeURIComponent(busca)}&page=${page}&limit=6`);
+            const data = await res.json();
+
+            document.getElementById('pageInfo').textContent = `Página ${page}`;
+            const grid = document.getElementById('reviewsGrid');
+            grid.innerHTML = data.results.length ? '' : '<p style="color: #8a99ad; grid-column: 1/-1; text-align: center;">Nenhum filme encontrado.</p>';
+
+            data.results.forEach(r => {
                 const card = document.createElement('div');
                 card.className = 'card';
-
-                // coloca dentro do card a capa, titulo, usuario, nota e comentario
-                // se o filme nao tiver capa, usa uma imagem padrao
                 card.innerHTML = `
-                    <img src="${review.poster_url || 'https://via.placeholder.com/220x300'}" alt="${review.movie_title}">
+                    <img src="${r.poster_url || 'https://via.placeholder.com/220x300'}">
                     <div class="card-body">
-                        <div class="card-title">${review.movie_title}</div>
-                        <div class="card-author">Por @${review.user_username}</div>
-                        <div class="rating">★ ${review.rating}/10</div>
-                        <div class="content">${review.content}</div>
+                        <div class="card-title">${r.movie_title}</div>
+                        <div class="card-author">
+                            Por <a href="#users/${r.user_id}" class="user-link">@${r.user_username}</a>
+                        </div>
+                        <div class="rating">★ ${r.rating}/10</div>
+                        <div class="content">${r.content}</div>
                     </div>
                 `;
-
-                // coloca o card pronto dentro do grid da pagina
-                reviewsGrid.appendChild(card);
+                grid.appendChild(card);
             });
-
-        // caso aconteca algum erro na busca, mostra o erro no console
-        // e uma mensagem para o usuario na tela
-        } catch (error) {
-            console.error('Erro ao buscar reviews:', error);
-            reviewsGrid.innerHTML = '<p style="color: #e91e63;">Erro ao carregar os dados.</p>';
         }
     }
 
+    // eventos de clique e navegação
+    document.getElementById('searchBtn').onclick = () => { page = 1; navegar(); };
+    document.getElementById('searchInput').onkeypress = (e) => { if (e.key === 'Enter') { page = 1; navegar(); } };
+    document.getElementById('prevBtn').onclick = () => { if (page > 1) { page--; navegar(); } };
+    document.getElementById('nextBtn').onclick = () => { page++; navegar(); };
+    document.getElementById('backBtn').onclick = () => { window.location.hash = ''; };
+    document.getElementById('navHome').onclick = () => { window.location.hash = ''; };
 
-    // quando clicar no botao pesquisar, pega o que foi digitado
-    // tira os espacos desnecessarios e chama a funcao de busca
-    searchBtn.addEventListener('click', () => {
-        fetchReviews(searchInput.value.trim());
-    });
-
-
-    // permite fazer a pesquisa apertando enter
-    searchInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            fetchReviews(searchInput.value.trim());
-        }
-    });
-
-
-    // faz uma busca assim que a pagina abre
-    fetchReviews();
+    window.onhashchange = navegar;
+    navegar();
 });

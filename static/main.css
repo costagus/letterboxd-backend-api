@@ -1,8 +1,9 @@
+/* configuracoes gerais e reset */
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-family: 'plus jakarta sans', sans-serif;
 }
 
 body {
@@ -11,7 +12,24 @@ body {
     padding-bottom: 60px;
 }
 
-/* Navbar Harmonizada */
+.container {
+    max-width: 1100px;
+    margin: 50px auto;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* topo e barra de navegacao */
+.header-wrapper {
+    background: rgba(11, 12, 16, 0.9);
+    border-bottom: 1px solid #1f242d;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
 .navbar {
     display: flex;
     justify-content: space-between;
@@ -20,14 +38,6 @@ body {
     margin: 0 auto;
     padding: 20px;
     width: 100%;
-}
-
-header-wrapper {
-    background: rgba(11, 12, 16, 0.9);
-    border-bottom: 1px solid #1f242d;
-    position: sticky;
-    top: 0;
-    z-index: 100;
 }
 
 .logo {
@@ -46,45 +56,55 @@ header-wrapper {
     border-radius: 50%;
 }
 
-/* Botões */
-.btn-pink {
-    background: #e91e63;
-    color: #fff;
+/* botoes */
+.btn-pink,
+.btn-cyan {
     border: none;
     padding: 10px 22px;
     border-radius: 20px;
     font-weight: 700;
     cursor: pointer;
-    box-shadow: 0 0 15px rgba(233, 30, 99, 0.4);
     transition: transform 0.2s;
+}
+
+.btn-pink {
+    background: #e91e63;
+    color: #fff;
+    box-shadow: 0 0 15px rgba(233, 30, 99, 0.4);
 }
 
 .btn-cyan {
     background: #00bcd4;
     color: #000;
-    border: none;
-    padding: 10px 22px;
-    border-radius: 20px;
-    font-weight: 700;
-    cursor: pointer;
     box-shadow: 0 0 15px rgba(0, 188, 212, 0.4);
-    transition: transform 0.2s;
 }
 
-.btn-pink:hover, .btn-cyan:hover {
+.btn-pink:hover,
+.btn-cyan:hover {
     transform: scale(1.03);
 }
 
-/* Centralização Geral */
-.container {
-    max-width: 1100px;
-    margin: 50px auto;
-    padding: 0 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.btn-secondary {
+    background: #1f242d;
+    color: #fff;
+    border: 1px solid #323946;
+    padding: 8px 18px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.2s;
 }
 
+.btn-secondary:hover:not(:disabled) {
+    background: #2b323f;
+}
+
+.btn-secondary:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+/* banner de boas vindas */
 .welcome-banner {
     display: flex;
     flex-direction: column;
@@ -116,7 +136,7 @@ header-wrapper {
     margin-bottom: 30px;
 }
 
-/* Campo de Busca */
+/* campo de pesquisa */
 .search-box {
     display: flex;
     background: #151821;
@@ -137,7 +157,7 @@ header-wrapper {
     font-size: 0.95rem;
 }
 
-/* Seção de Título Harmonizada ao Centro */
+/* secao principal de conteudos */
 .recent-section {
     width: 100%;
     display: flex;
@@ -171,7 +191,7 @@ header-wrapper {
     border-radius: 2px;
 }
 
-/* Grid de Cards */
+/* grade de cartoes */
 .grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -225,4 +245,64 @@ header-wrapper {
     color: #b0bec5;
     font-size: 0.85rem;
     line-height: 1.4;
+}
+
+.user-link {
+    color: #00bcd4;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.user-link:hover {
+    text-decoration: underline;
+}
+
+/* cartao de perfil do usuario */
+.profile-card {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    background: #151821;
+    padding: 30px;
+    border-radius: 12px;
+    border: 1px solid #232936;
+}
+
+.profile-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #e91e63;
+}
+
+.profile-name {
+    font-size: 1.8rem;
+    color: #fff;
+    font-weight: 800;
+}
+
+.profile-username {
+    color: #00bcd4;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.profile-bio {
+    color: #b0bec5;
+    font-size: 0.9rem;
+}
+
+/* controles de paginacao */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-top: 35px;
+}
+
+#pageInfo {
+    color: #8a99ad;
+    font-weight: 600;
 }

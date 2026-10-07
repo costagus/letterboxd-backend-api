@@ -11,7 +11,7 @@ class Users:
 
         # o user_id é passado como uma tupla (user_id,) para evitar SQL injection
 
-        # user_row é basicamente uma tupla com os dados do usuário, ou None se não existir
+        # user_row é uma tupla com os dados do usuári ou None se não existir
 
         user_row = self._cursor.fetchone()
         if not user_row:
@@ -37,8 +37,8 @@ class Users:
             for review in reviews_rows
         ]
 
-        # basicamente, a gente pega os dados do usuário e as reviews dele e monta um dicionário com tudo isso usando
-        # compreensão de listas para as reviews, e depois retorna esse dicionário representando o usuário e suas reviews
+        # pega os dados do usuário e as reviews dele e monta um dicionário com tudo isso usando
+        # compreensão de listas para as reviewse dps retorna esse dicionário representando o usuário e suas reviews
 
         return {
             "id": user_row[0],
