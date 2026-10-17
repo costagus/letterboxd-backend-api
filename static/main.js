@@ -53,6 +53,37 @@ document.addEventListener('DOMContentLoaded', () => {
                     `).join('')}
                 </div>
             `;
+
+        } else if (path === '/users') {
+            // TELA DE LISTAGEM DE USUÁRIOS PAGINADA : recup
+            reviewsView.style.display = 'none';
+            userView.style.display = 'none';
+            usersListView.style.display = 'block';
+
+            const pageUsers = parseInt(params.get('page')) || 1;
+            document.getElementById('pageUserInfo').textContent = `Página ${pageUsers}`;
+
+            const res = await fetch(`/users?page=${pageUsers}&limit=3`, { headers: { 'Accept': 'application/json' } });
+            const data = await res.json();
+
+            const grid = document.getElementById('usersGrid');
+            grid.innerHTML = data.results.length ? '' : '<p style="color: #8a99ad; grid-column: 1/-1; text-align: center;">Nenhum usuário encontrado.</p>';
+
+            data.results.forEach(u => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.style.padding = '20px';
+                card.style.textAlign = 'center';
+                card.style.cursor = 'pointer';
+                card.innerHTML = `
+                    <img src="${u.avatar_url || 'https://via.placeholder.com/150'}" class="profile-avatar" style="width: 80px; height: 80px; border-radius: 50%; margin: 0 auto 10px auto; object-fit: cover;">
+                    <div class="card-title">${u.name}</div>
+                    <div class="card-author" style="color: #00bcd4; margin-bottom: 5px;">@${u.username}</div>
+                    <div class="content">${u.bio || 'Sem bio.'}</div>
+                `;
+                card.onclick = () => irPara(`/users/${u.id}`);
+                grid.appendChild(card);
+            });
         } else {
             // mas se for a tela inicial ou de busca, exibe as reviews com paginação
             userView.style.display = 'none';
@@ -127,6 +158,19 @@ document.addEventListener('DOMContentLoaded', () => {
     // botões de voltar para a página inicial
     document.getElementById('backBtn').onclick = () => irPara('/');
     document.getElementById('navHome').onclick = () => irPara('/');
+
+    // navegação de membros e paginação de usuários
+    document.getElementById('navUsuarios').onclick = () => irPara('/users?page=1');
+    document.getElementById('navFilmes').onclick = () => irPara('/');
+    
+    document.getElementById('prevUserBtn').onclick = () => {
+        const p = parseInt(new URLSearchParams(window.location.search).get('page')) || 1;
+        if (p > 1) irPara(`/users?page=${p - 1}`);
+    };
+    document.getElementById('nextUserBtn').onclick = () => {
+        const p = parseInt(new URLSearchParams(window.location.search).get('page')) || 1;
+        irPara(`/users?page=${p + 1}`);
+    };
 
     //  botões de voltar/avançar do navegador
     window.onpopstate = navegar;

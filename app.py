@@ -89,6 +89,27 @@ def get_reviews_by_term(termo):
         "results": results
     })
 
+# recup: rota p/ buscar usuários com paginação
+
+@app.route('/users', methods=['GET'])
+def get_users():
+    termo = request.args.get('termo') or request.args.get('q') or ''
+    page = request.args.get('page', default=1, type=int)
+    limit = request.args.get('limit', default=5, type=int)
+
+    cursor = get_db().cursor()
+    users_model = Users(cursor)
+    results = users_model.search(query=termo, page=page, limit=limit)
+    cursor.close()
+
+    return jsonify({
+        "page": page,
+        "limit": limit,
+        "termo_buscado": termo,
+        "total_results": len(results),
+        "results": results
+    }), 200
+
 if __name__ == '__main__':
     # porta 3000 igual nos slides da aula
     app.run(host='0.0.0.0', port=3000, debug=True)

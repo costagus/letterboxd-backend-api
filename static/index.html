@@ -14,9 +14,11 @@
             <div class="logo" id="navHome" style="cursor: pointer;">
                 <span class="logo-dot"></span> GV REVIEWS
             </div>
-            <button class="btn-pink">+ Registrar</button>
+            <div style="display: flex; gap: 12px; align-items: center;">
+                <button id="navFilmes" class="btn-cyan" style="background: transparent; color: #fff; border: 1px solid #232936;">Filmes</button>
+                <button id="navUsuarios" class="btn-cyan" style="background: transparent; color: #fff; border: 1px solid #232936;">Membros</button>
+            </div>
         </header>
-    </div>
 
     <main class="container">
         <!-- TELA DE REVIEWS E BUSCA -->
@@ -52,6 +54,23 @@
             <button id="backBtn" class="btn-secondary" style="margin-bottom: 20px;">← Voltar para Avaliações</button>
             <div id="userContainer"></div>
         </div>
+
+                <!-- TELA DE LISTAGEM DE USUÁRIOS PAGINADA : recuperação -->
+        <div id="usersListView" style="display: none; width: 100%;">
+            <section class="recent-section">
+                <div class="section-header">
+                    <h2>Membros da Comunidade</h2>
+                </div>
+                <div id="usersGrid" class="grid"></div>
+
+                <div class="pagination">
+                    <button id="prevUserBtn" class="btn-secondary">Anterior</button>
+                    <span id="pageUserInfo">Página 1</span>
+                    <button id="nextUserBtn" class="btn-secondary">Próxima</button>
+                </div>
+            </section>
+        </div>
+
     </main>
 
     <script src="/static/main.js"></script>

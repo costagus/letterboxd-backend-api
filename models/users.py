@@ -48,3 +48,36 @@ class Users:
             "avatar_url": user_row[4],
             "reviews": reviews
         }
+
+    # recup: fazendo paginação para usuários, com busca por termo, limitando resultados e pulando páginas anteriores
+    
+    def search(self, query='', page=1, limit=5):
+        # definir página e limite, o try p/ garantir que sejam inteiros positivos, se não forem, usa o padrão 1 e 5
+        try:
+            page = max(1, int(page))
+            limit = max(1, int(limit))
+        except (ValueError, TypeError):
+            page = 1
+            limit = 5
+        # offset para pular os resultados das páginas anteriores, e search_pattern para buscar o termo com ILIKE
+        offset = (page - 1) * limit
+        search_pattern = f"%{query}%"
+        # query
+        self._cursor.execute("""
+            SELECT id, name, username, bio, avatar_url
+            FROM users
+            WHERE name ILIKE %s OR username ILIKE %s
+            ORDER BY id ASC 
+            LIMIT %s OFFSET %s;
+        """, (search_pattern, search_pattern, limit, offset)) # evitando SQL injection
+        rows = self._cursor.fetchall()
+        return [
+            {
+                "id": row[0],
+                "name": row[1],
+                "username": row[2],
+                "bio": row[3],
+                "avatar_url": row[4]
+            }
+            for row in rows
+        ]
