@@ -46,7 +46,7 @@ def close_db(exception):
 def handle_exception(e):
     app.logger.error(f"Erro: {e}")
     if isinstance(e, HTTPException): # se for um erro HTTP, retorna o código e a descrição do erro
-        return jsonify(error=str(e.descricao)), e.code
+        return jsonify(error=str(e.description)), e.code
     return jsonify(error='Erro do servidor'), 500 # 500: Internal Server Error (erro genérico do servidor)
 
 # agora teremos as rotas da nossa API
@@ -128,6 +128,57 @@ def get_users():
         "total_results": len(results),
         "results": results
     }), 200
+
+# projeto 2 - rotas de login e inserção (REST)
+
+# rota de login (bcrypt p/ validação de senha e JWT p/ autenticação)
+@app.route('/login', methods=['POST'])
+@validate() # validação do schema pydantic
+def login(body: LoginSchema): # 'body:' é o corpo da req
+    cursor = get_db().cursor()
+    users_model = Users(cursor)
+    user = users_model.get_by_username(body.username)
+    cursor.close()
+
+    if not user:
+        return jsonify({"error": "Usuário ou senha incorretos"}), 401
+
+    # gerando token JWT
+    token = create_access_token(
+        identity=user['id'], # id do usuário como identidade
+        additional_claims={"username": user['username']} # informações adicionais no token (opcional)
+    )
+    app.logger.debug(f"Usuário {user['username']} logado com sucesso. Token JWT gerado: {token}")
+    return jsonify({"message": "Login bem-sucedido", "token": token, "user": user}), 200
+
+# rota de criação de review (POST /reviews) com validação e sanitização dos campos
+@app.route('/reviews', methods=['POST'])
+@jwt_required() # rota protegida, precisa de token JWT válido
+@validate() # validação do schema pydantic
+def create_review(body: ReviewCreateSchema): 
+    # extrai id do usuário do token JWT
+    user_id = get_jwt_identity()
+    claims = get_jwt() # pega os claims do token JWT (claims = informações adicionais)
+
+    db = get_db()
+    cursor = db.cursor()
+    reviews_model = Reviews(cursor)
+
+    new_id = reviews_model.create(
+        movie_title=body.movie_title,
+        rating=body.rating,
+        content=body.content,
+        poster_url=body.poster_url,
+        user_id=user_id
+    )
+    # body é o corpo da requisição, que já foi validado e sanitizado pelo schema pydantic
+    # gravando a nova review no banco de dados
+    db.commit() # salvando no bd
+    cursor.close()
+
+    app.logger.info(f"Nova review criada pelo usuário {claims['username']} (ID: {user_id}): {body.movie_title} - Nota: {body.rating}")
+    # retorna status 201 (Created) e o id da nova review
+    return jsonify({"message": "Review criada com sucesso", "review_id": new_id}), 201
 
 if __name__ == '__main__':
     # porta 3000 igual nos slides da aula
