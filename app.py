@@ -3,8 +3,18 @@ import psycopg2
 from models.users import Users
 from flask import request, send_from_directory
 from models.reviews import Reviews
+import logging
+from werkzeug.exceptions import HTTPException
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity, get_jwt
+from flask_pydantic import validate
+from pydantic_models.schemas import LoginSchema, ReviewCreateSchema
 
 app = Flask(__name__)
+
+# configurando a chave secreta para JWT
+app.logger.setLevel(logging.DEBUG) # para ver os logs no console
+app.config['JWT_SECRET_KEY'] = 'chaver-super-secreta-letterboxd-utfpr' 
+jwt = JWTManager(app) # objeto que valida e cria tokens JWT
 
 # configurando a conexão com o banco de dados
 DB_CONFIG = {
@@ -29,6 +39,15 @@ def close_db(exception):
     db = g.pop('db', None)
     if db is not None:
         db.close()
+
+# tratamento de erros globais
+# retornar erros em JSON para que o frontend possa tratar melhor
+@app.errorhandler(Exception)
+def handle_exception(e):
+    app.logger.error(f"Erro: {e}")
+    if isinstance(e, HTTPException): # se for um erro HTTP, retorna o código e a descrição do erro
+        return jsonify(error=str(e.descricao)), e.code
+    return jsonify(error='Erro do servidor'), 500 # 500: Internal Server Error (erro genérico do servidor)
 
 # agora teremos as rotas da nossa API
 @app.route('/')
