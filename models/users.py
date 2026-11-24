@@ -1,3 +1,5 @@
+import bcrypt
+
 class Users:
     def __init__(self, cursor):
         self._cursor = cursor
@@ -81,3 +83,29 @@ class Users:
             }
             for row in rows
         ]
+
+    def login(self, username, password):
+        self._cursor.execute('''
+            SELECT id, name, username, bio, avatar_url, password
+            FROM users
+            WHERE username = %s
+        ''', (username,))
+        user_row = self._cursor.fetchone()
+
+        # se o usuário não for encontrado, retorna None
+        if not user_row:
+            return None
+
+        # user_row[5] é a senha hash armazenada no banco de dados
+        stored_password_hash = user_row[5]
+        # transforma a senha digitada e o hash do banco em bytes e comparamos
+        senha_bateu = bcrypt.checkpw(password.encode('utf-8'), stored_password_hash.encode('utf-8'))
+
+        if senha_bateu:
+            # retorna um dicionário com os dados do usuário, sem a senha, se a senha estiver correta
+            return {
+                "id": user_row[0],
+                "name": user_row[1],
+                "username": user_row[2]
+            }
+        return None

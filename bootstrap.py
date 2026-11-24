@@ -1,4 +1,5 @@
 import psycopg2
+import bcrypt
 
 #  >> dados de conexão com o postgreSQL rodando no docker
 DB_CONFIG = {
@@ -14,8 +15,8 @@ def create_table_and_populate():
     conn = psycopg2.connect(**DB_CONFIG)
     cursor = conn.cursor()
 
-    # comando p limpar a tabela antes de reinserior os dados (limpa e zera ids)
-    cursor.execute("TRUNCATE TABLE reviews, users RESTART IDENTITY CASCADE;")
+    # limpeza do banco de dados, caso já exista, para evitar duplicidade de dados
+    cursor.execute("DROP TABLE IF EXISTS reviews, users CASCADE;")
 
     # criando a tabela users
     cursor.execute('''
@@ -24,7 +25,8 @@ def create_table_and_populate():
             name VARCHAR(100) NOT NULL,
             username VARCHAR(50) NOT NULL UNIQUE,
             bio TEXT,
-            avatar_url VARCHAR(255)
+            avatar_url VARCHAR(255),
+            password VARCHAR(255) NOT NULL
             )
     ''')
 
@@ -55,11 +57,14 @@ def create_table_and_populate():
         ("Erika", "erikahilt", "Viciada em plot twists e thrillers sombrios.", "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150")
     ]
 
+    # gera o hash da senha padrão "senha123" usando bcrypt, que é uma biblioteca de hashing de senhas segura
+    senha_padrao_hash = bcrypt.hashpw("senha123".encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+
     for user in users_data:
         cursor.execute('''
-            INSERT INTO users (name, username, bio, avatar_url)
-            VALUES (%s, %s, %s, %s)
-        ''', user)
+            INSERT INTO users (name, username, bio, avatar_url, password)
+            VALUES (%s, %s, %s, %s, %s)
+        ''', (user[0], user[1], user[2], user[3], senha_padrao_hash))
 
     # populando a tabela reviews com dados de exemplo
     reviews_data = [

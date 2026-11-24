@@ -67,3 +67,19 @@ class Reviews:
             })
 
         return results
+
+    # implementação de uma rota de inserção de dados
+    # função p inserir uma nova review no banco de dados (projeto2)
+
+    def create(self, movie_title, rating, content, poster_url, user_id):
+        sql = '''
+            INSERT INTO reviews (movie_title, rating, content, poster_url, user_id)
+            VALUES (%s, %s, %s, %s, %s)
+            RETURNING id;
+        '''
+        # executa passando a tupla de parâmetros (proteção contra SQL injection)
+        self._cursor.execute(sql, (movie_title, rating, content, poster_url, user_id))
+
+        # pega o id da review recém criada
+        new_id = self._cursor.fetchone()[0]
+        return new_id
