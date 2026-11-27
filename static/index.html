@@ -17,10 +17,22 @@
             <div style="display: flex; gap: 12px; align-items: center;">
                 <button id="navFilmes" class="btn-cyan" style="background: transparent; color: #fff; border: 1px solid #232936;">Filmes</button>
                 <button id="navUsuarios" class="btn-cyan" style="background: transparent; color: #fff; border: 1px solid #232936;">Membros</button>
+                <button id="btnToggleLogin" class="btn-pink" style="background: transparent; color: #fff; border: 1px solid #232936;">Entrar</button>
+                <button id="btnToggleReview" class="btn-pink" style="background: transparent; color: #fff; border: 1px solid #232936;">Registrar Review</button>
             </div>
         </header>
 
     <main class="container">
+
+        <!-- PAINEL DE LOGIN (PROJETO 2 - JWT) -->
+        <div id="loginBox" style="display: none; background: #151821; border: 1px solid #232936; border-radius: 12px; padding: 20px; margin-bottom: 25px; width: 100%; max-width: 450px; margin-left: auto; margin-right: auto;">
+            <h3 style="margin-bottom: 12px; color: #fff;">Login de Usuário</h3>
+            <input type="text" id="loginUser" placeholder="Usuário (ex: gustavomelo)" style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #232936; background: #0b0c10; color: #fff;" />
+            <input type="password" id="loginPass" placeholder="Senha (ex: senha123)" style="width: 100%; padding: 10px; margin-bottom: 12px; border-radius: 8px; border: 1px solid #232936; background: #0b0c10; color: #fff;" />
+            <button id="btnFazerLogin" class="btn-cyan" style="width: 100%;">Fazer Login</button>
+            <p id="loginMsg" style="margin-top: 10px; font-size: 0.85rem; text-align: center;"></p>
+        </div>
+
         <!-- TELA DE REVIEWS E BUSCA -->
         <div id="reviewsView">
             <section class="welcome-banner">
