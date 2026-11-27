@@ -33,6 +33,17 @@
             <p id="loginMsg" style="margin-top: 10px; font-size: 0.85rem; text-align: center;"></p>
         </div>
 
+        <!-- PAINEL DE REGISTRO DE REVIEW (PROJETO 2 - PROTEGIDO POR LOGIN) -->
+        <div id="reviewBox" style="display: none; background: #151821; border: 1px solid #232936; border-radius: 12px; padding: 20px; margin-bottom: 25px; width: 100%; max-width: 550px; margin-left: auto; margin-right: auto;">
+            <h3 style="margin-bottom: 12px; color: #fff;">Nova Avaliação de Filme</h3>
+            <input type="text" id="revTitle" placeholder="Título do Filme (ex: Interstellar)" style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #232936; background: #0b0c10; color: #fff;" />
+            <input type="number" id="revRating" placeholder="Nota de 0 a 10 (ex: 9)" min="0" max="10" style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #232936; background: #0b0c10; color: #fff;" />
+            <input type="text" id="revPoster" placeholder="URL da Capa (opcional)" style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #232936; background: #0b0c10; color: #fff;" />
+            <textarea id="revContent" placeholder="Escreva sua crítica sobre o filme..." rows="3" style="width: 100%; padding: 10px; margin-bottom: 12px; border-radius: 8px; border: 1px solid #232936; background: #0b0c10; color: #fff;"></textarea>  
+            <button id="btnSalvarReview" class="btn-pink" style="width: 100%;">Publicar Avaliação</button>
+            <p id="reviewMsg" style="margin-top: 10px; font-size: 0.85rem; text-align: center;"></p>
+        </div>
+        
         <!-- TELA DE REVIEWS E BUSCA -->
         <div id="reviewsView">
             <section class="welcome-banner">

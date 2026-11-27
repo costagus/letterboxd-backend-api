@@ -172,6 +172,46 @@ document.addEventListener('DOMContentLoaded', () => {
         irPara(`/users?page=${p + 1}`);
     };
 
+    // PROJETO 2 -> LOGIN JWT E INSERT REVIEW
+    const btnToggleLogin = document.getElementById('btnToggleLogin');
+    const btnToggleReview = document.getElementById('btnToggleReview');
+    const loginBox = document.getElementById('loginBox');
+    const reviewBox = document.getElementById('reviewBox');
+
+    // atualizando texto do botão conforme o usuário estiver logado ou não
+    function atualizarEstadoLogin() {
+        const token = localStorage.getItem('token');
+        const userName = localStorage.getItem('userName');
+        if (token) {
+            btnToggleLogin.textContent = `Sair (${userName})`;
+        } else {
+            btnToggleLogin.textContent = 'Entrar';
+        }
+    }
+    atualizarEstadoLogin();
+
+    // botão entrar / sair no topo da page
+    btnToggleLogin.onclick = () => {
+        if (localStorage.getItem('token')) {
+            // se tiver token, faz logout apagando do localStorage
+            localStorage.removeItem('token');
+            localStorage.removeItem('userName');
+            atualizarEstadoLogin();
+            alert('Você saiu da sua conta!');
+        } else {
+            // abre/fecha a tela de login
+            reviewBox.style.display = 'none';
+            loginBox.style.display = loginBox.style.display === 'none' ? 'block' : 'none';
+        }
+    };
+
+    // botão + registrar no topo da page (abre/fecha a tela de review)
+    btnToggleReview.onclick = () => {
+        loginBox.style.display = 'none';
+        reviewBox.style.display = reviewBox.style.display === 'none' ? 'block' : 'none';
+    };
+
+
     //  botões de voltar/avançar do navegador
     window.onpopstate = navegar;
     navegar();
