@@ -137,7 +137,7 @@ def get_users():
 def login(body: LoginSchema): # 'body:' é o corpo da req
     cursor = get_db().cursor()
     users_model = Users(cursor)
-    user = users_model.get_by_username(body.username)
+    user = users_model.login(body.username, body.password)
     cursor.close()
 
     if not user:
@@ -145,7 +145,7 @@ def login(body: LoginSchema): # 'body:' é o corpo da req
 
     # gerando token JWT
     token = create_access_token(
-        identity=user['id'], # id do usuário como identidade
+        identity=str(user['id']), # id do usuário como identidade
         additional_claims={"username": user['username']} # informações adicionais no token (opcional)
     )
     app.logger.debug(f"Usuário {user['username']} logado com sucesso. Token JWT gerado: {token}")
@@ -157,7 +157,7 @@ def login(body: LoginSchema): # 'body:' é o corpo da req
 @validate() # validação do schema pydantic
 def create_review(body: ReviewCreateSchema): 
     # extrai id do usuário do token JWT
-    user_id = get_jwt_identity()
+    user_id = int(get_jwt_identity())
     claims = get_jwt() # pega os claims do token JWT (claims = informações adicionais)
 
     db = get_db()

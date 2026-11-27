@@ -211,8 +211,76 @@ document.addEventListener('DOMContentLoaded', () => {
         reviewBox.style.display = reviewBox.style.display === 'none' ? 'block' : 'none';
     };
 
+    // enviar login (POST /login) 
+    document.getElementById('btnFazerLogin').onclick = async () => {
+        const username = document.getElementById('loginUser').value.trim();
+        const password = document.getElementById('loginPass').value.trim();
+        const msg = document.getElementById('loginMsg');
 
-    //  botões de voltar/avançar do navegador
+        const res = await fetch('/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password })
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+            // se login ok, salva token e nome do usuário no localStorage
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('userName', data.user.username);
+            atualizarEstadoLogin();
+            msg.style.color = '#4caf50';
+            msg.textContent = 'Login realizado com sucesso!';
+            setTimeout(() => { loginBox.style.display = 'none'; msg.textContent = ''; }, 1000);
+        } else {
+            msg.style.color = '#e91e63';
+            msg.textContent = data.error || 'Erro ao fazer login.';
+        }
+    }; 
+
+    // enviar nova review (POST /reviews) c/ Authorization Bearer token
+    document.getElementById('btnSalvarReview').onclick = async () => {
+        const token = localStorage.getItem('token');
+        const msg = document.getElementById('reviewMsg');
+
+        const movie_title = document.getElementById('revTitle').value.trim();
+        const rating = parseInt(document.getElementById('revRating').value);
+        const poster_url = document.getElementById('revPoster').value.trim();
+        const content = document.getElementById('revContent').value.trim();
+
+        const headers = { 'Content-Type': 'application/json' };
+        if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+        }
+
+        const res = await fetch('/reviews', {
+            method: 'POST',
+            headers,
+            body: JSON.stringify({ movie_title, rating, content, poster_url })
+        });
+        const data = await res.json();
+
+        if (res.status === 201) {
+            msg.style.color = '#4caf50';
+            msg.textContent = 'Review cadastrada com sucesso!';
+            document.getElementById('revTitle').value = '';
+            document.getElementById('revRating').value = '';
+            document.getElementById('revPoster').value = '';
+            document.getElementById('revContent').value = '';
+            navegar();
+            setTimeout(() => { reviewBox.style.display = 'none'; msg.textContent = ''; }, 1200);
+        } else {
+            msg.style.color = '#ff4081';
+            msg.style.fontWeight = '700';
+            if (res.status === 401) {
+                msg.textContent = '⚠️ Acesso negado (401): Você precisa fazer Login antes de publicar uma avaliação!';
+            } else {
+                msg.textContent = '⚠️ ' + (data.msg || data.error || JSON.stringify(data.validation_error?.body_params?.[0]?.msg || data));
+            }
+        }
+    };
+
+    // botões de voltar/avançar do navegador
     window.onpopstate = navegar;
     navegar();
 });
